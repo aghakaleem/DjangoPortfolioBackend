@@ -13,3 +13,4 @@ urlpatterns = [
     path('experiences', views.ExperienceListView.as_view(), name='experiences'),
     path('educations', views.EducationListView.as_view(), name='educations'),
 ]
+ 
