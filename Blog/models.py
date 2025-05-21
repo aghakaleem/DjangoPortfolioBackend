@@ -49,16 +49,33 @@ class PostSection(models.Model):
         ordering = ['order']
 
     def __str__(self):
-        return f"{self.post.title} - {self.get_section_type_display()} [{self.order}]"
+        return f"{self.post.title} - {self.section_type}"
     
+   
     
 class Comment(models.Model):
-    post = models.ForeignKey(Post, related_name="comments", on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, related_name="comments", on_delete=models.CASCADE, related_name="comments")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="comments")
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        unique_together = ['post', 'user']
+        ordering = ['-created_at']
 
     def __str__(self):
-        return f"Comment by {self.user.email} on {self.post.title}"
+        return f"Comment by {self.user.email} on {self.post.title} Post"
+    
+class Like(models.Model):
+    post = models.ForeignKey(Post, related_name="likes", on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="likes", on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ['post', 'user']
+
+    def __str__(self):
+        return f"{self.user.email} liked {self.post.title} Post"
+    
+    
