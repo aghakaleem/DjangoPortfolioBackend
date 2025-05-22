@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ['id', 'full_name', 'email', 'profile_picture_url']
+        fields = ['id', 'full_name', 'profile_picture_url']
 
 class PostSectionsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -29,23 +29,23 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = ['id', 'user', 'content', 'created_at', 'updated_at']
     
+
 class LikeSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
+
     class Meta:
         model = Like
-        fields = ['id', 'user', 'post', 'created_at']
-
+        fields = ['id', 'user']
+        
 
 class PostDetailSerializer(serializers.ModelSerializer):
     sections = PostSectionsSerializer(many=True, read_only=True)
     comments = CommentSerializer(many=True, read_only=True)
     comments_count = serializers.SerializerMethodField()
-    likes = LikeSerializer(many=True, read_only=True)
     likes_count = serializers.SerializerMethodField() 
-    user = serializers.SerializerMethodField()
     class Meta:
         model = Post
-        fields = ['id', 'title', 'slug', 'title_image', 'created_at', 'updated_at', 'sections', 'comments', 'likes_count']
+        fields = ['id', 'title', 'slug','title_image', 'created_at', 'updated_at', 'sections', 'comments', 'likes_count', 'comments_count']
 
     def get_comments_count(self, post):
         return post.comments.count()
