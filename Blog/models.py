@@ -75,7 +75,6 @@ class PostSection(models.Model):
                 self.order = 1
         super().save(*args, **kwargs)
     
-   
     
 class Comment(models.Model):
     post = models.ForeignKey(Post, related_name="comments", on_delete=models.CASCADE)

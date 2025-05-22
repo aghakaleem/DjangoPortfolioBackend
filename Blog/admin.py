@@ -3,11 +3,16 @@ from django import forms
 # Register your models here.
 
 from django.contrib.auth import get_user_model
-from .models import Post, PostSection, Comment, Like
+from django.contrib.auth.admin import UserAdmin
+from .models import Post, PostSection, Comment, Like, CustomUser
 
 
-User = get_user_model()
 
+
+class CustomUserAdmin(UserAdmin):
+    list_display = ("username", "email", "full_name")
+
+admin.site.register(CustomUser, CustomUserAdmin)
 
 class PostSectionInline(admin.TabularInline):
     model = PostSection
